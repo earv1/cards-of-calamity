@@ -8,11 +8,14 @@ module.exports = {
 		port: 3000
 	},
 	devtool: 'inline-source-map',
+
 	plugins: [
-		new CopyWebpackPlugin([{
-			from: 'build/assets',
-			to: 'assets'
-		}]),
+		new CopyWebpackPlugin({
+		patterns: [
+			{from: 'build/assets',
+			to: 'assets'}
+		],
+		}),
 		new HTMLWebpackPlugin({
 			template: 'build/index.html',
 			filename: 'index.html'
