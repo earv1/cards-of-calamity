@@ -1,8 +1,8 @@
 {
   "scripts": {
-    "production": "./node_modules/.bin/webpack --mode production --config webpack.config.prod.js",
-    "build": "./node_modules/.bin/webpack --mode development --config webpack.config.dev.js",
-    "start": "./node_modules/.bin/webpack-dev-server --config webpack.config.dev.js"
+    "production": "webpack --mode production --config webpack.config.prod.js",
+    "build": "webpack --mode development --config webpack.config.dev.js",
+    "start": "webpack-dev-server --config webpack.config.dev.js"
   },
   "author": "anvoevodin",
   "repository": "https://github.com/ANVoevodin/pixijs_v5_setup.git",
