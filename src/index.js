@@ -1,42 +1,57 @@
-// Import Application class that is the main part of our PIXI project
-import { Application } from '@pixi/app'
+import * as PIXI from 'pixi.js'
+// create a Pixi application
+let app = new PIXI.Application({ width: 800, height: 450 });
 
-// In order that PIXI could render things we need to register appropriate plugins
-import { Renderer } from '@pixi/core' // Renderer is the class that is going to register plugins
+// add the canvas that Pixi automatically created for you to the HTML document
+document.body.appendChild(app.view);
 
-import { BatchRenderer } from '@pixi/core' // BatchRenderer is the "plugin" for drawing sprites
-Renderer.registerPlugin('batch', BatchRenderer)
+let animatedCapguy, background, spritesheetname;
 
-import { TickerPlugin } from '@pixi/ticker' // TickerPlugin is the plugin for running an update loop (it's for the application class)
-Application.registerPlugin(TickerPlugin)
+spritesheetname = "assets/archer.json";
 
-// And just for convenience let's register Loader plugin in order to use it right from Application instance like app.loader.add(..) etc.
-import { AppLoaderPlugin } from '@pixi/loaders'
-Application.registerPlugin(AppLoaderPlugin)
+// load sprite sheet image + data file, call setup() if completed
+// console.log("Tell me, whyyyy", PIXI.Loader.shared);
+PIXI.Loader.shared
+    .add(spritesheetname)
+    .load(setup);
 
-// Sprite is our image on the stage
-import { Sprite } from '@pixi/sprite'
 
-// App with width and height of the page
-const app = new Application({
-	width: window.innerWidth,
-	height: window.innerHeight
-})
-document.body.appendChild(app.view) // Create Canvas tag in the body
+function setup() {
+    // the sprite sheet we've just loaded:
+    let sheet = PIXI.Loader.shared.resources[spritesheetname].spritesheet;
 
-// Load the logo
-app.loader.add('logo', './assets/logo.png')
-app.loader.load(() => {
-	const sprite = Sprite.from('logo')
-	sprite.anchor.set(0.5) // We want to rotate our sprite relative to the center, so 0.5
-	app.stage.addChild(sprite)
+	// initialize background sprite
 
-	// Position the sprite at the center of the stage
-	sprite.x = app.screen.width * 0.5
-	sprite.y = app.screen.height * 0.5
+	background = new PIXI.Sprite(sheet.textures["background.png"]);
+	if(!sheet.textures["background.png"]){
+		console.error("Empty Background", sheet.textures);
+	} else {
+		console.log("Textures", sheet.textures);
+    } 
+    app.stage.addChild(background);
 
-	// Put the rotating function into the update loop
-	app.ticker.add(delta => {
-		sprite.rotation += 0.02 * delta
-	})
-})
+    // scale stage container that it fits into the view
+    app.stage.scale.x = app.view.width / background.width;
+    app.stage.scale.y = app.view.height / background.height;
+
+    // create an animated sprite
+    animatedCapguy = new PIXI.AnimatedSprite(sheet.animations["spr_ArcherIdle_strip_NoBkg"]);
+
+    // configure + start animation:
+    animatedCapguy.animationSpeed = 0.167;                  // 6 fps
+    animatedCapguy.position.set(0, background.height - 100); // almost bottom-left corner of the canvas
+    // animatedCapguy.scale.y = 20
+	// animatedCapguy.scale.x = 10
+    animatedCapguy.play();
+
+    // Enable this to update the anchor points with each animation frame
+     animatedCapguy.updateAnchor = true;
+
+    // add it to the stage and render!
+    app.stage.addChild(animatedCapguy);
+    app.ticker.add(delta => gameLoop(delta));
+}
+
+function gameLoop(delta) {
+    animatedCapguy.x = (animatedCapguy.x + 5*delta) % (background.width + 200);
+}
