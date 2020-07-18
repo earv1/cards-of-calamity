@@ -20,13 +20,13 @@ function setup() {
     // the sprite sheet we've just loaded:
     let sheet = PIXI.Loader.shared.resources[spritesheetname].spritesheet;
 
-	// initialize background sprite
+    // initialize background sprite
 
-	background = new PIXI.Sprite(sheet.textures["background.png"]);
-	if(!sheet.textures["background.png"]){
-		console.error("Empty Background", sheet.textures);
-	} else {
-		console.log("Textures", sheet.textures);
+    background = new PIXI.Sprite(sheet.textures["background.png"]);
+    if(!sheet.textures["background.png"]){
+        console.error("Empty Background", sheet.textures);
+    } else {
+        console.log("Textures", sheet.textures);
     } 
     app.stage.addChild(background);
 
@@ -39,9 +39,13 @@ function setup() {
 
     // configure + start animation:
     animatedCapguy.animationSpeed = 0.167;                  // 6 fps
-    animatedCapguy.position.set(0, background.height - 100); // almost bottom-left corner of the canvas
-    // animatedCapguy.scale.y = 20
-	// animatedCapguy.scale.x = 10
+
+    const scale = 800;
+    animatedCapguy.position.set(0, background.height - 100 - scale); // almost bottom-left corner of the canvas
+    animatedCapguy.width = scale 
+    animatedCapguy.height = scale 
+    //animatedCapguy.scale.y = 20
+    //animatedCapguy.scale.x = 10
     animatedCapguy.play();
 
     // Enable this to update the anchor points with each animation frame
@@ -53,5 +57,39 @@ function setup() {
 }
 
 function gameLoop(delta) {
-    animatedCapguy.x = (animatedCapguy.x + 5*delta) % (background.width + 200);
+    //animatedCapguy.x = calculateXMovement(delta, animatedCapguy, background.width);
+
+    //animatedCapguy.y = calculateYMovement(animatedCapguy.y)
+}
+
+var moveRight = 1;
+function calculateXMovement(delta, animatedCapGuy, backgroundWidth) {
+    const currentXPosition = animatedCapGuy.x;
+    var rightBound = backgroundWidth+200;
+    let futurePosition = (currentXPosition + 5 * delta * moveRight)
+    if(futurePosition > rightBound) {
+        moveRight = -1;
+        animatedCapGuy.scale.x *= -1;
+    } else if (futurePosition < -800 ) {
+        moveRight = 1;
+        animatedCapGuy.scale.x *= -1;
+    }
+    return futurePosition;
+}
+
+const Y_BOUNDS = {top: 200, bottom: 280} 
+function calculateYMovement(currentYPosition) {
+
+    if(currentYPosition > Y_BOUNDS.bottom) {
+        console.log("BOTTOM")
+            return currentYPosition - 1 
+    }
+    else if(currentYPosition < Y_BOUNDS.top) {
+        console.log("TOP")
+            return currentYPosition + 1 
+    } else {
+        let yMovement = (Math.floor(Math.random() * 3)) - 1;
+        yMovement = yMovement * 2;
+        return (currentYPosition +  yMovement)
+    }
 }
