@@ -11,6 +11,14 @@ let animatedCapguy, background, spritesheetname, buttona;
 spritesheetname = "assets/2/1.json";
 buttona = 'assets/2/b.jpg';
 
+var card = {label:String, imageDirectory:String, id: Number}
+
+let deck = [
+    {label: "Blue Eyes White Dragon", imageDirectory: "assets/cards/2.jpg", id: 1},
+    {label: "Pikachu", imageDirectory: "assets/cards/1.png", id: 2},
+    {label: "Nicol Bolas, God-Pharoah", imageDirectory: "assets/cards/3.jpg", id: 3}
+];
+
 // load sprite sheet image + data file, call setup() if completed
 // console.log("Tell me, whyyyy", PIXI.Loader.shared);
 PIXI.Loader.shared
@@ -69,7 +77,7 @@ function setup() {
     // app.stage.addChild(button);
 
     // Create Card
-    createCard(300,800);
+    drawRandomCard(3);
 
 }
 
@@ -115,11 +123,20 @@ function calculateYMovement(currentYPosition) {
 var stage = new PIXI.Container();
 
 // create a texture from an image path
-var texture = PIXI.Texture.from('assets/2/b.jpg');
 
-function createCard(x, y)
+
+function drawRandomCard(number){
+    for( var i = 0; i < number; i++) {
+        createCard ((300*i)+50, 800, i)
+    }
+}
+
+function createCard(x, y, id)
 {
-    // create our little bunny friend..
+    // create our little bunny friend..\
+    console.log("A: " + id + " : " + deck[0].imageDirectory);
+    // deck[id].imageDirectory
+    var texture = PIXI.Texture.from(deck[id].imageDirectory);
     var card = new PIXI.Sprite(texture);
 
     // enable the bunny to be interactive... this will allow it to respond to mouse and touch events
