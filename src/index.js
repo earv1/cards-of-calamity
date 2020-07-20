@@ -1,8 +1,7 @@
 import * as PIXI from 'pixi.js'
-import { InteractionManager } from '@pixi/interaction'
-// Renderer.registerPlugin('interaction', InteractionManager)
+
 // create a Pixi application
-let app = new PIXI.Application({ width: 800, height: 450 });
+let app = new PIXI.Application({ width: 1600, height: 900 });
 
 // add the canvas that Pixi automatically created for you to the HTML document
 document.body.appendChild(app.view);
@@ -58,17 +57,19 @@ function setup() {
     app.stage.addChild(animatedCapguy);
     app.ticker.add(delta => gameLoop(delta));
 
-    //Cards ! button
-    var textureButton = PIXI.Texture.from(buttona);
-    var button = new PIXI.Sprite(textureButton);
-    button.buttonMode = true;
-    button.interactive = true;
-    button.buttonMode = true;
-    button.anchor.set(0.5);
-    button.x = 300;
-    button.y = 800;
-    app.stage.addChild(button);
+    //Regular button
+    // var textureButton = PIXI.Texture.from(buttona);
+    // var button = new PIXI.Sprite(textureButton);
+    // button.buttonMode = true;
+    // button.interactive = true;
+    // button.buttonMode = true;
+    // button.anchor.set(0.5);
+    // button.x = 300;
+    // button.y = 800;
+    // app.stage.addChild(button);
 
+    // Create Card
+    createCard(300,800);
 
 }
 
@@ -107,5 +108,81 @@ function calculateYMovement(currentYPosition) {
         let yMovement = (Math.floor(Math.random() * 3)) - 1;
         yMovement = yMovement * 2;
         return (currentYPosition +  yMovement)
+    }
+}
+
+// create the root of the scene graph
+var stage = new PIXI.Container();
+
+// create a texture from an image path
+var texture = PIXI.Texture.from('assets/2/b.jpg');
+
+function createCard(x, y)
+{
+    // create our little bunny friend..
+    var card = new PIXI.Sprite(texture);
+
+    // enable the bunny to be interactive... this will allow it to respond to mouse and touch events
+    card.interactive = true;
+
+    // this button mode will mean the hand cursor appears when you roll over the bunny with your mouse
+    card.buttonMode = true;
+
+    // center the bunny's anchor point
+    card.anchor.set(0.5);
+
+    // make it a bit bigger, so it's easier to grab
+    card.scale.set(1);
+
+    // setup events
+    card
+        // events for drag start
+        .on('mousedown', onDragStart)
+        .on('touchstart', onDragStart)
+        // events for drag end
+        .on('mouseup', onDragEnd)
+        .on('mouseupoutside', onDragEnd)
+        .on('touchend', onDragEnd)
+        .on('touchendoutside', onDragEnd)
+        // events for drag move
+        .on('mousemove', onDragMove)
+        .on('touchmove', onDragMove);
+
+    // move the sprite to its designated position
+    card.position.x = x;
+    card.position.y = y;
+
+    // add it to the stage
+    app.stage.addChild(card);
+}
+
+
+function onDragStart(event)
+{
+    // store a reference to the data
+    // the reason for this is because of multitouch
+    // we want to track the movement of this particular touch
+    this.data = event.data;
+    this.alpha = 0.5;
+    this.dragging = true;
+}
+
+function onDragEnd()
+{
+    this.alpha = 1;
+
+    this.dragging = false;
+
+    // set the interaction data to null
+    this.data = null;
+}
+
+function onDragMove()
+{
+    if (this.dragging)
+    {
+        var newPosition = this.data.getLocalPosition(this.parent);
+        this.position.x = newPosition.x;
+        this.position.y = newPosition.y;
     }
 }
