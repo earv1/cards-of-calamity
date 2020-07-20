@@ -133,9 +133,7 @@ function drawRandomCard(number){
 
 function createCard(x, y, id)
 {
-    // create our little bunny friend..\
-    console.log("A: " + id + " : " + deck[0].imageDirectory);
-    // deck[id].imageDirectory
+    // create our little bunny friend..
     var texture = PIXI.Texture.from(deck[id].imageDirectory);
     var card = new PIXI.Sprite(texture);
 
@@ -169,6 +167,8 @@ function createCard(x, y, id)
     card.position.x = x;
     card.position.y = y;
 
+    card.name = deck[id].label;
+
     // add it to the stage
     app.stage.addChild(card);
 }
@@ -190,8 +190,11 @@ function onDragEnd()
 
     this.dragging = false;
 
+    checkCardRegion();
+
     // set the interaction data to null
     this.data = null;
+    
 }
 
 function onDragMove()
@@ -202,4 +205,11 @@ function onDragMove()
         this.position.x = newPosition.x;
         this.position.y = newPosition.y;
     }
+}
+
+function checkCardRegion() {
+
+    // console.log("Chiul: " + app.stage.);
+    
+
 }
