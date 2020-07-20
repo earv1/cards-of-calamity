@@ -23,6 +23,8 @@
     "@pixi/core": "^5.3.0",
     "@pixi/loaders": "^5.3.0",
     "@pixi/sprite": "^5.3.0",
-    "@pixi/ticker": "^5.3.0"
+    "@pixi/ticker": "^5.3.0",
+    "pixi": "^0.3.1",
+    "pixi.js": "^5.3.0"
   }
 }

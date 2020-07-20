@@ -1,13 +1,16 @@
 import * as PIXI from 'pixi.js'
+import { InteractionManager } from '@pixi/interaction'
+// Renderer.registerPlugin('interaction', InteractionManager)
 // create a Pixi application
 let app = new PIXI.Application({ width: 800, height: 450 });
 
 // add the canvas that Pixi automatically created for you to the HTML document
 document.body.appendChild(app.view);
 
-let animatedCapguy, background, spritesheetname;
+let animatedCapguy, background, spritesheetname, buttona;
 
-spritesheetname = "assets/archer.json";
+spritesheetname = "assets/2/1.json";
+buttona = 'assets/2/b.jpg';
 
 // load sprite sheet image + data file, call setup() if completed
 // console.log("Tell me, whyyyy", PIXI.Loader.shared);
@@ -35,7 +38,7 @@ function setup() {
     app.stage.scale.y = app.view.height / background.height;
 
     // create an animated sprite
-    animatedCapguy = new PIXI.AnimatedSprite(sheet.animations["spr_ArcherIdle_strip_NoBkg"]);
+    animatedCapguy = new PIXI.AnimatedSprite(sheet.animations["Cowboy2_walk with gun"]);
 
     // configure + start animation:
     animatedCapguy.animationSpeed = 0.167;                  // 6 fps
@@ -54,12 +57,25 @@ function setup() {
     // add it to the stage and render!
     app.stage.addChild(animatedCapguy);
     app.ticker.add(delta => gameLoop(delta));
+
+    //Cards ! button
+    var textureButton = PIXI.Texture.from(buttona);
+    var button = new PIXI.Sprite(textureButton);
+    button.buttonMode = true;
+    button.interactive = true;
+    button.buttonMode = true;
+    button.anchor.set(0.5);
+    button.x = 300;
+    button.y = 800;
+    app.stage.addChild(button);
+
+
 }
 
 function gameLoop(delta) {
-    //animatedCapguy.x = calculateXMovement(delta, animatedCapguy, background.width);
+    animatedCapguy.x = calculateXMovement(delta, animatedCapguy, background.width);
 
-    //animatedCapguy.y = calculateYMovement(animatedCapguy.y)
+    animatedCapguy.y = calculateYMovement(animatedCapguy.y)
 }
 
 var moveRight = 1;
