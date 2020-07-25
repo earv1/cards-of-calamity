@@ -6,7 +6,7 @@ let app = new PIXI.Application({ width: 1600, height: 900 });
 // add the canvas that Pixi automatically created for you to the HTML document
 document.body.appendChild(app.view);
 
-let animatedCapguy, background, spritesheetname, buttona;
+let animatedCapguy: any, background: any, spritesheetname: any, buttona;
 
 spritesheetname = "assets/2/1.json";
 buttona = 'assets/2/b.jpg';
@@ -81,14 +81,14 @@ function setup() {
 
 }
 
-function gameLoop(delta) {
+function gameLoop(delta: any) {
     animatedCapguy.x = calculateXMovement(delta, animatedCapguy, background.width);
 
     animatedCapguy.y = calculateYMovement(animatedCapguy.y)
 }
 
 var moveRight = 1;
-function calculateXMovement(delta, animatedCapGuy, backgroundWidth) {
+function calculateXMovement(delta: any, animatedCapGuy: any, backgroundWidth: any) {
     const currentXPosition = animatedCapGuy.x;
     var rightBound = backgroundWidth+200;
     let futurePosition = (currentXPosition + 5 * delta * moveRight)
@@ -103,7 +103,7 @@ function calculateXMovement(delta, animatedCapGuy, backgroundWidth) {
 }
 
 const Y_BOUNDS = {top: 200, bottom: 280} 
-function calculateYMovement(currentYPosition) {
+function calculateYMovement(currentYPosition: any) {
 
     if(currentYPosition > Y_BOUNDS.bottom) {
         console.log("BOTTOM")
@@ -125,13 +125,13 @@ var stage = new PIXI.Container();
 // create a texture from an image path
 
 
-function drawRandomCard(number){
+function drawRandomCard(number: number){
     for( var i = 0; i < number; i++) {
         createCard ((300*i)+50, 800, i)
     }
 }
 
-function createCard(x, y, id)
+function createCard(x: number, y: number, id: number)
 {
     // create our little bunny friend..
     var texture = PIXI.Texture.from(deck[id].imageDirectory);
@@ -174,7 +174,7 @@ function createCard(x, y, id)
 }
 
 
-function onDragStart(event)
+function onDragStart(event: any)
 {
     // store a reference to the data
     // the reason for this is because of multitouch

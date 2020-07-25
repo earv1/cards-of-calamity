@@ -8,6 +8,18 @@ module.exports = {
 		port: 3000
 	},
 	devtool: 'inline-source-map',
+    resolve: {
+      extensions: [ '.tsx', '.ts', '.js' ],
+	},
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/,
+        },
+      ],
+    },
 
 	plugins: [
 		new CopyWebpackPlugin({
