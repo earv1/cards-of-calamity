@@ -30,7 +30,7 @@ export class Cards {
     {
         // create our little bunny friend..
         var texture = PIXI.Texture.from(this.deck[id].imageDirectory);
-        var card: any = new PIXI.Sprite(texture);
+        var card: PIXI.Sprite = new PIXI.Sprite(texture);
 
         // enable the bunny to be interactive... this will allow it to respond to mouse and touch events
         card.interactive = true;
