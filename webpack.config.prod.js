@@ -5,14 +5,17 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 module.exports = {
     mode: 'production',
     module: {
-        rules: [{
-            test: /\.(js)$/,
-            exclude: /node_modules/,
-            use: {
-                loader: 'babel-loader'
-            }
-        }]
+      rules: [
+        {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/,
+        },
+      ],
     },
+    resolve: {
+      extensions: [ '.tsx', '.ts', '.js' ],
+	},
     optimization: {
         minimizer: [new UglifyJSPlugin({
             uglifyOptions: {
@@ -23,10 +26,11 @@ module.exports = {
         })]
     },
     plugins: [
-        new CopyWebpackPlugin([{
-            from: 'build/assets',
-            to: 'assets'
-        }]),
+		new CopyWebpackPlugin({
+		patterns: [
+			{from: 'build/assets',
+			to: 'assets'}
+        ]}),
         new HTMLWebpackPlugin({
             template: 'build/index.html',
             filename: 'index.html',
