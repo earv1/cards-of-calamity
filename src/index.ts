@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js'
+import {Movement} from './movement'
 
 // create a Pixi application
 let app = new PIXI.Application({ width: 1600, height: 900 });
@@ -11,7 +12,9 @@ let animatedCapguy: any, background: any, spritesheetname: any, buttona;
 spritesheetname = "assets/2/1.json";
 buttona = 'assets/2/b.jpg';
 
-var card = {label:String, imageDirectory:String, id: Number}
+const movement = new Movement();
+
+var card = {label:String, imageDirectory: String, id: Number}
 
 let deck = [
     {label: "Blue Eyes White Dragon", imageDirectory: "assets/cards/2.jpg", id: 1},
@@ -82,42 +85,11 @@ function setup() {
 }
 
 function gameLoop(delta: any) {
-    animatedCapguy.x = calculateXMovement(delta, animatedCapguy, background.width);
+    animatedCapguy.x = movement.calculateXMovement(delta, animatedCapguy, background.width);
 
-    animatedCapguy.y = calculateYMovement(animatedCapguy.y)
+    animatedCapguy.y = movement.calculateYMovement(animatedCapguy.y)
 }
 
-var moveRight = 1;
-function calculateXMovement(delta: any, animatedCapGuy: any, backgroundWidth: any) {
-    const currentXPosition = animatedCapGuy.x;
-    var rightBound = backgroundWidth+200;
-    let futurePosition = (currentXPosition + 5 * delta * moveRight)
-    if(futurePosition > rightBound) {
-        moveRight = -1;
-        animatedCapGuy.scale.x *= -1;
-    } else if (futurePosition < -800 ) {
-        moveRight = 1;
-        animatedCapGuy.scale.x *= -1;
-    }
-    return futurePosition;
-}
-
-const Y_BOUNDS = {top: 200, bottom: 280} 
-function calculateYMovement(currentYPosition: any) {
-
-    if(currentYPosition > Y_BOUNDS.bottom) {
-        console.log("BOTTOM")
-            return currentYPosition - 1 
-    }
-    else if(currentYPosition < Y_BOUNDS.top) {
-        console.log("TOP")
-            return currentYPosition + 1 
-    } else {
-        let yMovement = (Math.floor(Math.random() * 3)) - 1;
-        yMovement = yMovement * 2;
-        return (currentYPosition +  yMovement)
-    }
-}
 
 // create the root of the scene graph
 var stage = new PIXI.Container();
